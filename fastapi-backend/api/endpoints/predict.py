@@ -1,19 +1,26 @@
-from fastapi import FastAPI, APIRouter, UploadFile, File
-from services.get_prediction import predict_image
-import io
-from PIL import Image
+from fastapi import FastAPI, APIRouter, UploadFile, File, Request
+from services.PredictionService import predict_image
+import numpy as np
+import cv2 as cv
 
 
 router = APIRouter()
 
 @router.post("/predict")
-def predict(file: UploadFile = File(...)):
+async def predict(request: Request, file: UploadFile = File(...)):
 
-    image_bytes = file.read()
-    image = Image.open(io.BytesIO(image_bytes))
+    content = await file.read()
 
-    prediction = predict_image(image)
+    
+    session = request.app.state.model_session
+    input_name = request.app.state.model_input_name
 
-    return prediction
+
+    predicted_class, confidence = predict_image(content, session, input_name)
+
+    return {"Prediction": predicted_class,
+            "Score": confidence,
+            "status": "200"
+            }
 
     
