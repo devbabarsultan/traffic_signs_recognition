@@ -1,4 +1,8 @@
 from fastapi import FastAPI, APIRouter, UploadFile, File
+from services.get_prediction import predict_image
+import io
+from PIL import Image
+
 
 router = APIRouter()
 
@@ -6,7 +10,10 @@ router = APIRouter()
 def predict(file: UploadFile = File(...)):
 
     image_bytes = file.read()
-    print(f"Received file: {file.filename}")
-    # Here you would add your prediction logic using the uploaded file
-    return {"filename": file.filename, "prediction": "dummy_prediction",
-            "file_size": len(image_bytes), "content_type": file.content_type}
+    image = Image.open(io.BytesIO(image_bytes))
+
+    prediction = predict_image(image)
+
+    return prediction
+
+    
