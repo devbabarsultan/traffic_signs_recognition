@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Traffic Detection API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
-    MODEL_PATH: str = "model/model.h5"
+    MODEL_PATH: str = "model/traffic_sign_model.onnx"
 
 
 settings = Settings()

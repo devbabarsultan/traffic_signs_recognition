@@ -1,8 +1,9 @@
-import pickle
-
-model_path = 'model/model.pkl'
+import onnxruntime as ort
+from core.config import settings
 
 def load_model(model_path: str):
-    with open(model_path, 'rb') as f:
-        model = pickle.load(f)
-    return model
+
+    session = ort.InferenceSession(settings.MODEL_PATH)
+    input_name = session.get_inputs()[0].name
+    
+    return session, input_name
