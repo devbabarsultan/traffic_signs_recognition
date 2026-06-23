@@ -10,8 +10,6 @@ def predict_image(image,session,input_name):
     processed_image = preprocess_image(image)
 
     outputs = session.run(None, {input_name: processed_image})
-
-    # Get prediction
     predictions = outputs[0]
 
     class_id = int(np.argmax(predictions))
